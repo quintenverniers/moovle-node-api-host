@@ -25,7 +25,7 @@ router.post('/', (req, res, next) => {
 router.get('/:teamID', (req, res, next) => {
     const id = req.params.teamID;
     if (id === 'special') {
-        res.status(200).json({
+        res.status(201).json({
             message: 'Getting the team with' + id,
             id: id
         });
