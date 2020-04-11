@@ -1,0 +1,15 @@
+{
+  "name": "moovle-node-api",
+  "version": "1.0.0",
+  "description": "Node.js API for Moovle Social Sports app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.ikdoeict.be/quinten.verniers/moovle-node-api.git"
+  },
+  "author": "Quinten Verniers",
+  "license": "ISC"
+}
