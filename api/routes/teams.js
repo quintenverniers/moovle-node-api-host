@@ -6,7 +6,7 @@ const router = express.Router();
  */
 router.get('/', (req, res, next) => {
     res.status(200).json({
-        message: 'Handling GET request to /games'
+        message: 'Handling GET request to /teams'
     });
 });
 
@@ -15,18 +15,18 @@ router.get('/', (req, res, next) => {
  */
 router.post('/', (req, res, next) => {
     res.status(200).json({
-        message: 'Handling POST request to /games'
+        message: 'Handling POST request to /teams'
     });
 });
 
 /**
  * Retrieve a game
  */
-router.get('/:gameID', (req, res, next) => {
-    const id = req.params.gameID;
+router.get('/:teamID', (req, res, next) => {
+    const id = req.params.teamID;
     if (id === 'special') {
         res.status(200).json({
-            message: 'Getting the game with' + id,
+            message: 'Getting the team with' + id,
             id: id
         });
     } else {
@@ -39,20 +39,20 @@ router.get('/:gameID', (req, res, next) => {
 /**
  * Update a game
  */
-router.patch('/:gameID', (req, res, next) => {
-    const id = req.params.gameID;
+router.patch('/:teamID', (req, res, next) => {
+    const id = req.params.teamID;
     res.status(200).json({
-        message: 'Updated game'
+        message: 'Updated team'
     });
 });
 
 /**
  * Delete a game
  */
-router.delete('/:gameID', (req, res, next) => {
-    const id = req.params.gameID;
+router.delete('/:teamID', (req, res, next) => {
+    const id = req.params.teamID;
     res.status(200).json({
-        message: 'Deleting the game'
+        message: 'Deleting the team'
     });
 });
 

@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 
-const gamesRouters = require('./api/routes/games');
+const gamesRoutes = require('./api/routes/games');
 
-app.use('/products', productRouters);
+app.use('/games', gamesRoutes);
 
 module.exports = app;
