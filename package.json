@@ -11,5 +11,8 @@
     "url": "https://git.ikdoeict.be/quinten.verniers/moovle-node-api.git"
   },
   "author": "Quinten Verniers",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
