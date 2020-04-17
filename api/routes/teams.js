@@ -14,8 +14,13 @@ router.get('/', (req, res, next) => {
  * Create a game
  */
 router.post('/', (req, res, next) => {
+    const team = {
+        name: req.body.name,
+        owner: req.body.owner
+    }
     res.status(200).json({
-        message: 'Handling POST request to /teams'
+        message: 'Handling POST request to /teams',
+        createdTeam: team
     });
 });
 
