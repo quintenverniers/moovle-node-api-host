@@ -1,12 +1,21 @@
 const express = require('express');
 const router = express.Router();
 
+const mongoose = require('mongoose');
+
+const Team = require('../models/team');
+
 /**
  * Get all games
  */
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling GET request to /teams'
+    Team.find()
+    .exec()
+    .then((teams) => {
+        res.status(200).json(teams);
+    })
+    .catch(err => {
+        res.status(500).json({error: err});
     });
 });
 
@@ -14,14 +23,22 @@ router.get('/', (req, res, next) => {
  * Create a game
  */
 router.post('/', (req, res, next) => {
-    const team = {
+    const team = new Team({
+        _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
         owner: req.body.owner
-    }
-    res.status(200).json({
-        message: 'Handling POST request to /teams',
-        createdTeam: team
     });
+    team.save().then(result => {
+        res.status(200).json({
+            message: 'Handling POST request to /teams',
+            createdTeam: result
+        }); 
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    })
 });
 
 /**
@@ -29,16 +46,25 @@ router.post('/', (req, res, next) => {
  */
 router.get('/:teamID', (req, res, next) => {
     const id = req.params.teamID;
-    if (id === 'special') {
-        res.status(201).json({
-            message: 'Getting the team with' + id,
-            id: id
+    Team.findById(id)
+    .exec()
+    .then((doc) => {
+        console.log(doc);
+        if(doc) {
+            res.status(200).json(doc);
+        } else {
+            res.status(404).json({
+                message: 'no team found with the provided ID'
+            })
+        }
+        
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
         });
-    } else {
-        res.status(200).json({
-            message: 'You passed an ID'
-        })
-    }
+    });
 });
 
 /**
@@ -46,8 +72,20 @@ router.get('/:teamID', (req, res, next) => {
  */
 router.patch('/:teamID', (req, res, next) => {
     const id = req.params.teamID;
-    res.status(200).json({
-        message: 'Updated team'
+    const fieldsToUpdate = {};
+    for(const field of req.body) {
+        fieldsToUpdate[field.propName] = field.value
+    }
+
+    Team.update({ _id: id },{ $set: fieldsToUpdate })
+    .exec()
+    .then((result) => {
+        res.status(200).json({ result });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
     });
 });
 
@@ -56,8 +94,15 @@ router.patch('/:teamID', (req, res, next) => {
  */
 router.delete('/:teamID', (req, res, next) => {
     const id = req.params.teamID;
-    res.status(200).json({
-        message: 'Deleting the team'
+    Team.remove({ _id: id })
+    .exec()
+    .then((result) => {
+        res.status(200).json(result);
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
     });
 });
 

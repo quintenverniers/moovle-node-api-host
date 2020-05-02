@@ -104,7 +104,6 @@ router.patch('/:gameID', (req, res, next) => {
             error: err
         });
     });
-    
 });
 
 /**
