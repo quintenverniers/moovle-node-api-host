@@ -33,10 +33,12 @@ router.post('/', (req, res, next) => {
         date: req.body.date,
         startTime: req.body.startTime,
         duration: req.body.duration,
+        location: req.body.location,
         pitchType: req.body.pitchType,
         venueType: req.body.venueType,
         payingGame: req.body.payingGame,
         entryPrice: req.body.entryPrice,
+        host: req.body.host,
         createdAt: req.body.createdAt,
         updatedAt: req.body.updatedAt
     });
