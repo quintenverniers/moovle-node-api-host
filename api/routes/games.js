@@ -26,6 +26,7 @@ router.get('/', (req, res, next) => {
  * Create a game
  */
 router.post('/', (req, res, next) => {
+    let createdDate = new Date().getTime();
     const game = new Game({
         _id: new mongoose.Types.ObjectId(),
         teamSize: req.body.teamSize,
@@ -39,8 +40,8 @@ router.post('/', (req, res, next) => {
         payingGame: req.body.payingGame,
         entryPrice: req.body.entryPrice,
         host: req.body.host,
-        createdAt: req.body.createdAt,
-        updatedAt: req.body.updatedAt
+        createdAt: createdDate,
+        updatedAt: createdDate
     });
     game.save().then(result => {
         console.log(result);
@@ -87,11 +88,13 @@ router.get('/:gameID', (req, res, next) => {
  * Update a game
  */
 router.patch('/:gameID', (req, res, next) => {
+    let updateDate = new Date();
     const id = req.params.gameID;
     const fieldsToUpdate = {};
     for(const field of req.body) {
         fieldsToUpdate[field.propName] = field.value
     }
+    fieldsToUpdate['updatedAt'] = updateDate;
 
     Game.update({ _id: id },{ $set: fieldsToUpdate })
     .exec()
