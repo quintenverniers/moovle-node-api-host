@@ -1,20 +1,33 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
+
+const Game = require('../models/game');
 
 /**
  * Get all games
  */
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling GET request to /games'
-    });
+    Game.find()
+    .exec()
+    .then((games) => {
+        console.log(games);
+        res.status(200).json(games);
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    })
 });
 
 /**
  * Create a game
  */
 router.post('/', (req, res, next) => {
-    const game = {
+    const game = new Game({
+        _id: new mongoose.Types.ObjectId(),
         teamSize: req.body.teamSize,
         spotsLeft: req.body.spotsLeft,
         date: req.body.date,
@@ -26,11 +39,20 @@ router.post('/', (req, res, next) => {
         entryPrice: req.body.entryPrice,
         createdAt: req.body.createdAt,
         updatedAt: req.body.updatedAt
-    }
-    res.status(201).json({
-        message: 'Handling POST request to /games',
-        createdGame: game
     });
+    game.save().then(result => {
+        console.log(result);
+        res.status(201).json({
+            message: 'Handling POST request to /games',
+            createdGame: result
+        });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    })
 });
 
 /**
@@ -38,16 +60,25 @@ router.post('/', (req, res, next) => {
  */
 router.get('/:gameID', (req, res, next) => {
     const id = req.params.gameID;
-    if (id === 'special') {
-        res.status(200).json({
-            message: 'Getting the game with' + id,
-            id: id
+    Game.findById(id)
+    .exec()
+    .then((doc) => {
+        console.log(doc);
+        if(doc) {
+            res.status(200).json(doc);
+        } else {
+            res.status(404).json({
+                message: 'no game found with the provided ID'
+            })
+        }
+        
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
         });
-    } else {
-        res.status(200).json({
-            message: 'You passed an ID'
-        })
-    }
+    });
 });
 
 /**
@@ -55,9 +86,25 @@ router.get('/:gameID', (req, res, next) => {
  */
 router.patch('/:gameID', (req, res, next) => {
     const id = req.params.gameID;
-    res.status(200).json({
-        message: 'Updated game'
+    const fieldsToUpdate = {};
+    for(const field of req.body) {
+        fieldsToUpdate[field.propName] = field.value
+    }
+
+    Game.update({ _id: id },{ $set: fieldsToUpdate })
+    .exec()
+    .then((updatedGame) => {
+        console.log(updatedGame);
+        res.status(200).json({
+            updatedGame
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
     });
+    
 });
 
 /**
@@ -65,8 +112,15 @@ router.patch('/:gameID', (req, res, next) => {
  */
 router.delete('/:gameID', (req, res, next) => {
     const id = req.params.gameID;
-    res.status(200).json({
-        message: 'Deleting the game'
+    Game.remove({ _id: id })
+    .exec()
+    .then((result) => {
+        res.status(200).json(result);
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
     });
 });
 

@@ -2,9 +2,12 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const gamesRoutes = require('./api/routes/games');
 const teamRoutes = require('./api/routes/teams');
+
+mongoose.connect('mongodb+srv://root:'+process.env.PASSWORD+'@moovle-mongodb-uzpam.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
