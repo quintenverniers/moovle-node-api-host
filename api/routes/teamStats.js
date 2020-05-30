@@ -11,8 +11,11 @@ const TeamStats = require('../models/teamStats');
 router.get('/', (req, res, next) => {
     TeamStats.find()
     .exec()
-    .then((teams) => {
-        res.status(200).json(teams);
+    .then((teamstats) => {
+        res.status(200).json({
+            count: teamstats.length,
+            teamstats: teamstats
+        });
     })
     .catch(err => {
         res.status(500).json({error: err});
