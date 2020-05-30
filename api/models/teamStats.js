@@ -2,14 +2,15 @@ const mongoose = require('mongoose');
 
 const teamStatsSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    gamesPlayed: Number,
-    gamesWon: Number,
-    gamesLost: Number,
-    gamesDraw: String,
-    goalsScored: Number,
-    goalsReceived: Number,
-    rating: String,
-    level: Number
+    team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team', required: true },
+    gamesPlayed: { type: Number, required: true, default: 0 },
+    gamesWon: { type: Number, required: true, default: 0 },
+    gamesLost: { type: Number, required: true, default: 0 },
+    gamesDraw: { type: Number, required: true, default: 0 },
+    goalsScored: { type: Number, required: true, default: 0 },
+    goalsReceived: { type: Number, required: true, default: 0 },
+    rating: { type: Number, required: true, default: 0 },
+    level: { type: Number, required: true, default: 0 }
 });
 
 module.exports = mongoose.model('Teamstats', teamStatsSchema);

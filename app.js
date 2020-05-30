@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const gamesRoutes = require('./api/routes/games');
 const teamRoutes = require('./api/routes/teams');
+const teamStatRoutes = require('./api/routes/teamStats');
 
 mongoose.connect('mongodb+srv://root:'+process.env.PASSWORD+'@moovle-mongodb-uzpam.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
 
 app.use('/games', gamesRoutes);
 app.use('/teams', teamRoutes);
+app.use('/teamstats', teamStatRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
