@@ -47,8 +47,8 @@ router.post('/', (req, res, next) => {
 /**
  * Retrieve a game
  */
-router.get('/:teamID', (req, res, next) => {
-    const id = req.params.teamID;
+router.get('/:teamStatID', (req, res, next) => {
+    const id = req.params.teamStatID;
     TeamStats.findById(id)
     .exec()
     .then((doc) => {
@@ -73,8 +73,8 @@ router.get('/:teamID', (req, res, next) => {
 /**
  * Update a game
  */
-router.patch('/:teamID', (req, res, next) => {
-    const id = req.params.teamID;
+router.patch('/:teamStatID', (req, res, next) => {
+    const id = req.params.teamStatID;
     const fieldsToUpdate = {};
     for(const field of req.body) {
         fieldsToUpdate[field.propName] = field.value
