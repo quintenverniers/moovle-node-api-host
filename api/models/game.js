@@ -2,20 +2,20 @@ const mongoose = require('mongoose');
 
 const gameSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    teamSize: Number,
-    totalSpots: Number,
-    spotsLeft: Number,
-    date: Date,
-    startTime: String,
-    duration: String,
-    location: String,
-    pitchType: String,
-    venueType: String,
-    payingGame: Boolean,
-    entryPrice: Number,
-    host: String,
-    createdAt: Date,
-    updatedAt: Date
+    teamSize: { type: Number, required: true },
+    totalSpots: { type: Number, required: true },
+    spotsLeft: { type: Number, required: true },
+    date: { type: Date, required: true },
+    startTime: { type: String, required: true },
+    duration: { type: String, required: true },
+    location: { type: String, required: true },
+    pitchType: { type: String, required: true },
+    venueType: { type: String, required: true },
+    payingGame: { type: Boolean, required: true },
+    entryPrice: { type: Number, required: true },
+    host: { type: String, required: true },
+    createdAt: { type: Date, required: true },
+    updatedAt: { type: Date, required: true }
 });
 
 module.exports = mongoose.model('Game', gameSchema);
