@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const TeamStats = require('../models/teamStats');
 
 /**
- * Get all games
+ * Get all teamstats
  */
 router.get('/', (req, res, next) => {
     TeamStats.find()
@@ -23,7 +23,7 @@ router.get('/', (req, res, next) => {
 });
 
 /**
- * Create a game
+ * Create a teamstat
  */
 router.post('/', (req, res, next) => {
     const teamStats = new TeamStats({
@@ -71,7 +71,7 @@ router.get('/:teamStatID', (req, res, next) => {
 });
 
 /**
- * Update a game
+ * Update a teamstat
  */
 router.patch('/:teamStatID', (req, res, next) => {
     const id = req.params.teamStatID;
@@ -84,23 +84,6 @@ router.patch('/:teamStatID', (req, res, next) => {
     .exec()
     .then((result) => {
         res.status(200).json({ result });
-    })
-    .catch(err => {
-        res.status(500).json({
-            error: err
-        });
-    });
-});
-
-/**
- * Delete a game
- */
-router.delete('/:teamID', (req, res, next) => {
-    const id = req.params.teamID;
-    TeamStats.remove({ _id: id })
-    .exec()
-    .then((result) => {
-        res.status(200).json(result);
     })
     .catch(err => {
         res.status(500).json({
