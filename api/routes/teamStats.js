@@ -4,6 +4,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 const TeamStats = require('../models/teamStats');
+const Team = require('../models/team');
 
 /**
  * Get all teamstats
@@ -26,15 +27,23 @@ router.get('/', (req, res, next) => {
  * Create a teamstat
  */
 router.post('/', (req, res, next) => {
-    const teamStats = new TeamStats({
-        _id: new mongoose.Types.ObjectId(),
-        team: req.body.team,
-    });
-    teamStats.save()
+    Team.findById(req.body.team)
+    .then(team => {
+        if(!team) {
+            return res.status(404).json({
+                message: 'Team not found'
+            });
+        }
+        const teamStats = new TeamStats({
+            _id: new mongoose.Types.ObjectId(),
+            team: req.body.team,
+        });
+        return teamStats.save()
+    })
     .then(result => {
-        res.status(200).json({
+        res.status(201).json({
             message: 'Handling POST request to /teamsstats',
-            createdTeam: result
+            createdTeamstats: result
         }); 
     })
     .catch(err => {
@@ -42,6 +51,7 @@ router.post('/', (req, res, next) => {
             error: err
         });
     })
+    
 });
 
 /**
@@ -57,7 +67,7 @@ router.get('/:teamStatID', (req, res, next) => {
             res.status(200).json(doc);
         } else {
             res.status(404).json({
-                message: 'no team found with the provided ID'
+                message: 'no teamstats found with the provided ID'
             })
         }
         
