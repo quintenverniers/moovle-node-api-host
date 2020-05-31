@@ -4,15 +4,20 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 const Team = require('../models/team');
+const TeamStats = require('../models/teamStats');
 
 /**
  * Get all games
  */
 router.get('/', (req, res, next) => {
     Team.find()
+    .populate('teamstats')
     .exec()
     .then((teams) => {
-        res.status(200).json(teams);
+        res.status(200).json({
+            count: teams.length,
+            teams: teams
+        });
     })
     .catch(err => {
         res.status(500).json({error: err});
@@ -23,18 +28,28 @@ router.get('/', (req, res, next) => {
  * Create a game
  */
 router.post('/', (req, res, next) => {
-    const team = new Team({
+    const teamStats = new TeamStats({
         _id: new mongoose.Types.ObjectId(),
-        name: req.body.name,
-        owner: req.body.owner
     });
-    team.save().then(result => {
-        res.status(200).json({
+    teamStats.save()
+    .then(teamStats => {
+        const team = new Team({
+            _id: new mongoose.Types.ObjectId(),
+            name: req.body.name,
+            owner: req.body.owner,
+            teamstats: teamStats._id
+        });
+        team.save().then(result => {
+            res.status(200).json({
+                message: 'Handling POST request to /teams',
+                createdTeam: result
+            }); 
+        })
+        /*res.status(200).json({
             message: 'Handling POST request to /teams',
-            createdTeam: result
-        }); 
-    })
-    .catch(err => {
+            createdTeam: teamStats._id
+        });*/
+    }).catch(err => {
         res.status(500).json({
             error: err
         });
@@ -94,16 +109,27 @@ router.patch('/:teamID', (req, res, next) => {
  */
 router.delete('/:teamID', (req, res, next) => {
     const id = req.params.teamID;
-    Team.remove({ _id: id })
+    Team.findById(id)
     .exec()
-    .then((result) => {
-        res.status(200).json(result);
+    .then((doc) => {
+        if(doc) {
+            return TeamStats.deleteOne({_id: doc.teamstats}).exec()
+        }
     })
+    .then(() => {
+        return Team.deleteOne({_id: id}).exec()
+    })
+    .then((teamresult => {
+        res.status(200).json(teamresult);
+    }))
     .catch(err => {
+        console.log(err);
         res.status(500).json({
+            message: 'team was not removed',
             error: err
         });
     });
+    
 });
 
 

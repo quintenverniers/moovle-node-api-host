@@ -12,7 +12,10 @@ router.get('/', (req, res, next) => {
     .exec()
     .then((games) => {
         console.log(games);
-        res.status(200).json(games);
+        res.status(200).json({
+            count: games.length,
+            games: games
+        });
     })
     .catch(err => {
         console.log(err);
@@ -31,6 +34,7 @@ router.post('/', (req, res, next) => {
         _id: new mongoose.Types.ObjectId(),
         teamSize: req.body.teamSize,
         spotsLeft: req.body.spotsLeft,
+        totalSpots: req.body.teamSize * 2,
         date: req.body.date,
         startTime: req.body.startTime,
         duration: req.body.duration,
@@ -116,7 +120,7 @@ router.patch('/:gameID', (req, res, next) => {
  */
 router.delete('/:gameID', (req, res, next) => {
     const id = req.params.gameID;
-    Game.remove({ _id: id })
+    Game.deleteOne({ _id: id })
     .exec()
     .then((result) => {
         res.status(200).json(result);

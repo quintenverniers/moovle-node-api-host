@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const teamStatsSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team', required: true },
     gamesPlayed: { type: Number, required: true, default: 0 },
     gamesWon: { type: Number, required: true, default: 0 },
     gamesLost: { type: Number, required: true, default: 0 },
