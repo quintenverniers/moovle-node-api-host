@@ -11,6 +11,7 @@ const teamStatRoutes = require('./api/routes/teamStats');
 mongoose.connect('mongodb+srv://root:'+process.env.PASSWORD+'@moovle-mongodb-uzpam.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.use(morgan('dev'));
+app.use('/uploads',express.static('uploads'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use((req, res, next) => {

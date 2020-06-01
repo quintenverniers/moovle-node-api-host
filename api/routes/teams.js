@@ -2,6 +2,30 @@ const express = require('express');
 const router = express.Router();
 
 const mongoose = require('mongoose');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './uploads/');
+    },
+    filename: function(req,file,cb) {
+        cb(null, new Date().getTime() +'_'+file.originalname);
+    }
+});
+
+const filterFilesToBeAccepted = (req, file, cb) => {
+    //reject a file
+    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        //accept file
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+}
+
+const upload = multer({storage: storage, limits: {
+    fileSize: 1024 * 1024 * 5
+}, fileFilter: filterFilesToBeAccepted});
 
 const Team = require('../models/team');
 const TeamStats = require('../models/teamStats');
@@ -27,7 +51,8 @@ router.get('/', (req, res, next) => {
 /**
  * Create a game
  */
-router.post('/', (req, res, next) => {
+router.post('/', upload.single('teamImage'),(req, res, next) => {
+    console.log(req.file);
     const teamStats = new TeamStats({
         _id: new mongoose.Types.ObjectId(),
     });
@@ -37,7 +62,8 @@ router.post('/', (req, res, next) => {
             _id: new mongoose.Types.ObjectId(),
             name: req.body.name,
             owner: req.body.owner,
-            teamstats: teamStats._id
+            teamstats: teamStats._id,
+            teamImage: req.file.path
         });
         team.save().then(result => {
             res.status(200).json({
