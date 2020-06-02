@@ -28,7 +28,7 @@ app.use((req, res, next) => {
 app.use('/games', gamesRoutes);
 app.use('/teams', teamRoutes);
 app.use('/teamstats', teamStatRoutes);
-app.use()
+app.use('/users',userRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
