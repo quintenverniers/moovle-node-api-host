@@ -45,27 +45,29 @@ router.post("/signup", (req, res, next) => {
 });
 
 router.post("/login", (req, res, next) => {
-    User.find({ email: req.body.email}).exec()
+    User.find({ email: req.body.email }).exec()
     .then(users => {
-        console.log("yeh");
         if(users.length < 1) {
             return res.status(401).json({
                 message: 'Auth failed'
-            })
+            });
         }
-        bcrypt.compare(req.body.password, users[0].password, (err, result) => {
-            if (err) {
+        bcrypt.compare(req.body.password, users[0].password, function(err, result) {
+            if(err) {
                 return res.status(401).json({
-                    message: 'Auth failed'
-                })
+                    message: 'Auth faileeed'
+                });
             }
-
-            if(result) {
+            if(result) {                
                 return res.status(200).json({
                     message: 'Auth successful'
-                })
+                });
+            } else {
+                return res.status(401).json({
+                    message: 'Auth faileeed'
+                });
             }
-        })
+        });
     })
     .catch(err => {
         res.status(500).json({
