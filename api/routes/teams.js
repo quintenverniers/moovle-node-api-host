@@ -4,6 +4,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
 
+const checkAuth = require('../middleware/verifyAuthenticationToken.js');
+
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, './uploads/');
@@ -51,8 +53,7 @@ router.get('/', (req, res, next) => {
 /**
  * Create a game
  */
-router.post('/', upload.single('teamImage'),(req, res, next) => {
-    console.log(req.file);
+router.post('/', checkAuth, upload.single('teamImage'), (req, res, next) => {
     const teamStats = new TeamStats({
         _id: new mongoose.Types.ObjectId(),
     });
@@ -68,13 +69,10 @@ router.post('/', upload.single('teamImage'),(req, res, next) => {
         team.save().then(result => {
             res.status(200).json({
                 message: 'Handling POST request to /teams',
-                createdTeam: result
+                createdTeam: result,
+                user: req.userData
             }); 
         })
-        /*res.status(200).json({
-            message: 'Handling POST request to /teams',
-            createdTeam: teamStats._id
-        });*/
     }).catch(err => {
         res.status(500).json({
             error: err
