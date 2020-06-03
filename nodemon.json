@@ -1,6 +1,7 @@
 {
     "env": {
         "USER":"ROOT",
-        "PASSWORD": "7W8TyLizzcPHQdi"
+        "PASSWORD": "7W8TyLizzcPHQdi",
+        "JWT_KEY": "icSSmYBncvosHIeqsbnObyl2Y5SCfveupdcA4Oz2xAMIYT8cjHesNqNXkwqDkDB"
     }
 }
