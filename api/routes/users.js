@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const JWT = require('jsonwebtoken');
 
+const checkAuth = require('../middleware/verifyAuthenticationToken.js');
+
 const User = require('../models/user');
 
 router.post("/signup", (req, res, next) => {
@@ -89,7 +91,7 @@ router.post("/login", (req, res, next) => {
     });
 })
 
-router.delete('/:userID', (req, res, next) => {
+router.delete('/:userID', checkAuth, (req, res, next) => {
     User.deleteOne({_id: req.params.userID}).exec()
     .then(result => {
         res.status(200).json({

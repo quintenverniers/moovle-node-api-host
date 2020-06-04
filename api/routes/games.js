@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
+const checkAuth = require('../middleware/verifyAuthenticationToken.js');
+
 const Game = require('../models/game');
 
 /**
@@ -28,7 +30,7 @@ router.get('/', (req, res, next) => {
 /**
  * Create a game
  */
-router.post('/', (req, res, next) => {
+router.post('/', checkAuth, (req, res, next) => {
     let createdDate = new Date().getTime();
     const game = new Game({
         _id: new mongoose.Types.ObjectId(),
@@ -91,7 +93,7 @@ router.get('/:gameID', (req, res, next) => {
 /**
  * Update a game
  */
-router.patch('/:gameID', (req, res, next) => {
+router.patch('/:gameID', checkAuth, (req, res, next) => {
     let updateDate = new Date();
     const id = req.params.gameID;
     const fieldsToUpdate = {};
@@ -118,7 +120,7 @@ router.patch('/:gameID', (req, res, next) => {
 /**
  * Delete a game
  */
-router.delete('/:gameID', (req, res, next) => {
+router.delete('/:gameID', checkAuth, (req, res, next) => {
     const id = req.params.gameID;
     Game.deleteOne({ _id: id })
     .exec()
