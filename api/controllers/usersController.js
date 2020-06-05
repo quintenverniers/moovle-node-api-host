@@ -5,6 +5,9 @@ const JWT = require('jsonwebtoken');
 const User = require('../models/user');
 const PlayerStats = require('../models/playerStats');
 
+/**
+ * Get all users
+ */
 exports.get_all_users = (req, res, next) => {
     User.find()
     .populate('playerstats')
@@ -22,6 +25,9 @@ exports.get_all_users = (req, res, next) => {
     })
 };
 
+/**
+ * Get a user
+ */
 exports.get_user_by_id = (req, res, next) => {
     const id = req.params.UserID;
     User.findById(id)
@@ -43,6 +49,9 @@ exports.get_user_by_id = (req, res, next) => {
     })
 };
 
+/**
+ * Create a user
+ */
 exports.register_user = (req, res, next) => {
     const playerStats = new PlayerStats({
         _id: new mongoose.Types.ObjectId(),
@@ -99,6 +108,9 @@ exports.register_user = (req, res, next) => {
 
 };
 
+/**
+ * Logina user
+ */
 exports.user_login = (req, res, next) => {
     User.find({ email: req.body.email }).exec()
     .then(users => {
@@ -149,6 +161,9 @@ exports.user_login = (req, res, next) => {
     });
 };
 
+/**
+ * Delete a user
+ */
 exports.delete_user = (req, res, next) => {
     User.deleteOne({_id: req.params.userID}).exec()
     .then(result => {
@@ -163,6 +178,9 @@ exports.delete_user = (req, res, next) => {
     });
 };
 
+/**
+ * Update a user
+ */
 exports.update_user = (req, res, next) => {
     const id = req.params.userID;
     const fieldsToUpdate = {};

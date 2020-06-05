@@ -24,7 +24,7 @@ router.get('/:teamStatID', TeamStatsController.get_teamStat_by_id);
 router.patch('/:teamStatID', TeamStatsController.update_teamStat);
 
 /**
- * Delete a game
+ * Delete a teamstat
  */
 router.delete('/:teamstatsID', TeamStatsController.delete_teamStat);
 

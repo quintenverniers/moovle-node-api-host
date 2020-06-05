@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 
 const TeamStats = require('../models/teamStats');
 
+/**
+ * Get all teamstats
+ */
 exports.get_all_teamStats = (req, res, next) => {
     TeamStats.find()
     .exec()
@@ -16,6 +19,9 @@ exports.get_all_teamStats = (req, res, next) => {
     });
 }
 
+/**
+ * Create a teamstat
+ */
 exports.create_teamStats = (req, res, next) => {
     const teamStats = new TeamStats({
         _id: new mongoose.Types.ObjectId(),
@@ -35,6 +41,9 @@ exports.create_teamStats = (req, res, next) => {
     
 }
 
+/**
+ * Get a teamstat
+ */
 exports.get_teamStat_by_id = (req, res, next) => {
     const id = req.params.teamStatID;
     TeamStats.findById(id)
@@ -58,6 +67,9 @@ exports.get_teamStat_by_id = (req, res, next) => {
     });
 }
 
+/**
+ * Update a teamstat
+ */
 exports.update_teamStat = (req, res, next) => {
     const id = req.params.teamStatID;
     const fieldsToUpdate = {};
@@ -77,6 +89,9 @@ exports.update_teamStat = (req, res, next) => {
     });
 }
 
+/**
+ * Delete a teamstat
+ */
 exports.delete_teamStat = (req, res, next) => {
     const id = req.params.teamstatsID;
     TeamStats.remove({ _id: id })

@@ -31,27 +31,27 @@ const upload = multer({storage: storage, limits: {
 const TeamsController = require('../controllers/teams');
 
 /**
- * Get all games
+ * Get all teams
  */
 router.get('/', TeamsController.get_all_teams);
 
 /**
- * Create a game
+ * Create a team
  */
 router.post('/', checkAuth, upload.single('teamImage'), TeamsController.create_new_team);
 
 /**
- * Retrieve a game
+ * Retrieve a team
  */
 router.get('/:teamID', TeamsController.get_team_by_id);
 
 /**
- * Update a game
+ * Update a team
  */
 router.patch('/:teamID', checkAuth, TeamsController.update_team);
 
 /**
- * Delete a game
+ * Delete a team
  */
 router.delete('/:teamID', checkAuth, TeamsController.delete_team);
 
