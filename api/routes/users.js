@@ -8,6 +8,42 @@ const checkAuth = require('../middleware/verifyAuthenticationToken.js');
 
 const User = require('../models/user');
 
+router.get("/", (req, res, next) => {
+    User.find()
+    .exec()
+    .then((users) => {
+        res.status(200).json({
+            count: users.length,
+            users: users
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            message: err
+        });
+    })
+})
+
+router.get("/:UserID", (req, res, next) => {
+    const id = req.params.UserID;
+    User.findById(id)
+    .exec()
+    .then((user) => {
+        if(user) {
+            res.status(200).json(user);
+        } else {
+            res.status(404).json({
+                message: 'no user found with the provided ID'
+            });
+        }
+    })
+    .catch(err => {
+        res.status(500).json({
+            message: err
+        });
+    })
+})
+
 router.post("/signup", (req, res, next) => {
     User.find({email: req.body.email})
     .exec()
@@ -27,7 +63,11 @@ router.post("/signup", (req, res, next) => {
                     const user = new User({
                         _id: mongoose.Types.ObjectId(),
                         email: req.body.email,
-                        password: hash
+                        password: hash,
+                        firstname: req.body.firstname,
+                        lastname: req.body.lastname,
+                        country: req.body.country,
+                        dateOfBirth: req.body.birthday
                     });
                     user.save()
                     .then(createdUser => {
@@ -74,6 +114,12 @@ router.post("/login", (req, res, next) => {
                     );       
                     return res.status(200).json({
                         message: 'Auth successful',
+                        user: {
+                            id: users[0]._id,
+                            firstname: users[0].firstname,
+                            lastname: users[0].lastname,
+                            email: users[0].email,
+                        },
                         token: Token
                     }
                 );
