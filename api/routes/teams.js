@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const mongoose = require('mongoose');
-const multer = require('multer');
-
 const checkAuth = require('../middleware/verifyAuthenticationToken.js');
+
+const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -29,56 +28,17 @@ const upload = multer({storage: storage, limits: {
     fileSize: 1024 * 1024 * 5
 }, fileFilter: filterFilesToBeAccepted});
 
-const Team = require('../models/team');
-const TeamStats = require('../models/teamStats');
+const TeamsController = require('../controllers/teams');
 
 /**
  * Get all games
  */
-router.get('/', (req, res, next) => {
-    Team.find()
-    .populate('teamstats')
-    .exec()
-    .then((teams) => {
-        res.status(200).json({
-            count: teams.length,
-            teams: teams
-        });
-    })
-    .catch(err => {
-        res.status(500).json({error: err});
-    });
-});
+router.get('/', TeamsController.get_all_teams);
 
 /**
  * Create a game
  */
-router.post('/', checkAuth, upload.single('teamImage'), (req, res, next) => {
-    const teamStats = new TeamStats({
-        _id: new mongoose.Types.ObjectId(),
-    });
-    teamStats.save()
-    .then(teamStats => {
-        const team = new Team({
-            _id: new mongoose.Types.ObjectId(),
-            name: req.body.name,
-            owner: req.body.owner,
-            teamstats: teamStats._id,
-            teamImage: req.file.path
-        });
-        team.save().then(result => {
-            res.status(200).json({
-                message: 'Handling POST request to /teams',
-                createdTeam: result,
-                user: req.userData
-            }); 
-        })
-    }).catch(err => {
-        res.status(500).json({
-            error: err
-        });
-    })
-});
+router.post('/', checkAuth, upload.single('teamImage'), TeamsController.create_new_team);
 
 /**
  * Retrieve a game

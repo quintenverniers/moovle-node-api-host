@@ -1,11 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 
 const checkAuth = require('../middleware/verifyAuthenticationToken.js');
-
-const Game = require('../models/game');
-
 const GamesController = require('../controllers/games');
 
 /**
