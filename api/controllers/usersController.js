@@ -3,9 +3,11 @@ const bcrypt = require('bcrypt');
 const JWT = require('jsonwebtoken');
 
 const User = require('../models/user');
+const PlayerStats = require('../models/playerStats');
 
 exports.get_all_users = (req, res, next) => {
     User.find()
+    .populate('playerstats')
     .exec()
     .then((users) => {
         res.status(200).json({
@@ -23,6 +25,7 @@ exports.get_all_users = (req, res, next) => {
 exports.get_user_by_id = (req, res, next) => {
     const id = req.params.UserID;
     User.findById(id)
+    .populate('playerstats')
     .exec()
     .then((user) => {
         if(user) {
@@ -41,46 +44,59 @@ exports.get_user_by_id = (req, res, next) => {
 };
 
 exports.register_user = (req, res, next) => {
-    User.find({email: req.body.email})
-    .exec()
-    .then(user => {
-        if (user.length >= 1) {
-            return res.status(422).json({
-                message: 'An account already exists with this email address'
-            });
-        } else {
-            bcrypt.hash(req.body.password, 10, (err, hash) => {
-                if(err) {
-                    return res.status(500).json({
-                        error: err,
-                        message: 'Something went wrong.'
-                    });
-                } else {
-                    const user = new User({
-                        _id: mongoose.Types.ObjectId(),
-                        email: req.body.email,
-                        password: hash,
-                        firstname: req.body.firstname,
-                        lastname: req.body.lastname,
-                        country: req.body.country,
-                        dateOfBirth: req.body.birthday
-                    });
-                    user.save()
-                    .then(createdUser => {
-                        res.status(201).json({
-                            message: 'User was successfully created',
-                            user: createdUser
+    const playerStats = new PlayerStats({
+        _id: new mongoose.Types.ObjectId(),
+    });
+
+    playerStats.save()
+    .then(playerStats => {
+        User.find({email: req.body.email})
+        .exec()
+        .then(user => {
+            if (user.length >= 1) {
+                return res.status(422).json({
+                    message: 'An account already exists with this email address'
+                });
+            } else {
+                bcrypt.hash(req.body.password, 10, (err, hash) => {
+                    if(err) {
+                        return res.status(500).json({
+                            error: err,
+                            message: 'Something went wrong.'
+                        });
+                    } else {
+                        const user = new User({
+                            _id: mongoose.Types.ObjectId(),
+                            email: req.body.email,
+                            password: hash,
+                            firstname: req.body.firstname,
+                            lastname: req.body.lastname,
+                            country: req.body.country,
+                            dateOfBirth: req.body.birthday,
+                            playerstats: playerStats._id
+                        });
+                        user.save()
+                        .then(createdUser => {
+                            res.status(201).json({
+                                message: 'User was successfully created',
+                                user: createdUser
+                            })
                         })
-                    })
-                    .catch(err => {
-                        res.status(500).json({
-                            error: err
-                        })
-                    });
-                }
+                        .catch(err => {
+                            res.status(500).json({
+                                error: err
+                            })
+                        });
+                    }
+                });
+            }
+        }).catch(err => {
+            res.status(500).json({
+                error: err
             });
-        }
-    })
+        })
+    });
+
 };
 
 exports.user_login = (req, res, next) => {
@@ -164,6 +180,4 @@ exports.update_user = (req, res, next) => {
             error: err
         });
     });
-}
-
-exports.updat
+};

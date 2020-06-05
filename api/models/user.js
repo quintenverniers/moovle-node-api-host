@@ -7,7 +7,8 @@ const userSchema = mongoose.Schema({
     firstname: { type: String },
     lastname: { type: String },
     country: { type: String },
-    dateOfBirth: { type: String}
+    dateOfBirth: { type: String},
+    playerstats: { type: mongoose.Schema.Types.ObjectId, ref: 'Playerstats', required: true }
 });
 
 module.exports = mongoose.model('User', userSchema);
