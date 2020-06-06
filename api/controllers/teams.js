@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const Team = require('../models/team');
-const TeamStats = require('../models/teamStats');
 
 /**
  * Get all teams

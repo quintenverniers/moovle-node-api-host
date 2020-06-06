@@ -8,7 +8,12 @@ const userSchema = mongoose.Schema({
     lastname: { type: String },
     country: { type: String },
     dateOfBirth: { type: String},
-    playerstats: { type: mongoose.Schema.Types.ObjectId, ref: 'Playerstats', required: true }
+    gamesPlayed: { type: Number, required: true, default: 0 },
+    gamesWon: { type: Number, required: true, default: 0 },
+    gamesLost: { type: Number, required: true, default: 0 },
+    gamesDraw: { type: Number, required: true, default: 0 },
+    rating: { type: Number, required: true, default: 0 },
+    experience: { type: Number, required: true, default: 0 },
 });
 
 module.exports = mongoose.model('User', userSchema);
