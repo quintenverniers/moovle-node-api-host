@@ -126,21 +126,49 @@ exports.join_team = (req, res, next) => {
             error: err
         })
     });
-    /*const fieldsToUpdate = {};
-    for(const field of req.body) {
-        fieldsToUpdate[field.propName] = field.value
-    }
+}
 
-    Team.update({ _id: id },{ $set: fieldsToUpdate })
+/**
+ * Leave a team
+ */
+exports.leave_team = (req, res, next) => {
+    const id = req.params.teamID;
+    const userToLeaveTeam = req.body.user;
+    let currentMembers = [];
+    Team.findById(id)
     .exec()
-    .then((result) => {
-        res.status(200).json({ result });
+    .then((team) => {
+        currentMembers = team.members;
+
+        console.log(currentMembers);
+        
+        let index = currentMembers.indexOf(userToLeaveTeam);
+        if(index > -1) {
+            currentMembers.splice(index,1);
+        }
+
+        console.log(currentMembers);
+        
+
+        return Team.updateOne(
+            { _id: id },
+            { $set: {
+                members: currentMembers
+            }
+        }).exec();
+    })
+    .then((teamResult) => {
+        res.status(200).json({
+            members: currentMembers,
+            newUser: userToLeaveTeam
+        });
     })
     .catch(err => {
+        console.log(err);
         res.status(500).json({
             error: err
-        });
-    });*/
+        })
+    });
 }
 
 /**
