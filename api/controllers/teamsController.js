@@ -96,6 +96,54 @@ exports.update_team = (req, res, next) => {
 }
 
 /**
+ * Join a team
+ */
+exports.join_team = (req, res, next) => {
+    const id = req.params.teamID;
+    const userToJoinTeam = req.body.user;
+    let currentMembers = [];
+    Team.findById(id)
+    .exec()
+    .then((team) => {
+        currentMembers = team.members;
+        currentMembers.push(userToJoinTeam);
+        return Team.updateOne(
+            { _id: id },
+            { $set: {
+                members: currentMembers
+            }
+        }).exec();
+    })
+    .then((teamResult) => {
+        res.status(200).json({
+            teamResult,
+            currentMembers: currentMembers,
+            newUser: userToJoinTeam
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });
+    /*const fieldsToUpdate = {};
+    for(const field of req.body) {
+        fieldsToUpdate[field.propName] = field.value
+    }
+
+    Team.update({ _id: id },{ $set: fieldsToUpdate })
+    .exec()
+    .then((result) => {
+        res.status(200).json({ result });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });*/
+}
+
+/**
  * Delete a team
  */
 exports.delete_team = (req, res, next) => {

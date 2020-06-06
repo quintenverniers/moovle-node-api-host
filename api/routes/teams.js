@@ -51,6 +51,11 @@ router.get('/:teamID', TeamsController.get_team_by_id);
 router.patch('/:teamID', checkAuth, TeamsController.update_team);
 
 /**
+ * Update a team
+ */
+router.patch('/join/:teamID', checkAuth, TeamsController.join_team);
+
+/**
  * Delete a team
  */
 router.delete('/:teamID', checkAuth, TeamsController.delete_team);
