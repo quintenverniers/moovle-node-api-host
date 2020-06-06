@@ -28,7 +28,7 @@ const upload = multer({storage: storage, limits: {
     fileSize: 1024 * 1024 * 5
 }, fileFilter: filterFilesToBeAccepted});
 
-const TeamsController = require('../controllers/teams');
+const TeamsController = require('../controllers/teamsController');
 
 /**
  * Get all teams

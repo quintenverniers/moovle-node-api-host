@@ -12,7 +12,8 @@ const teamSchema = mongoose.Schema({
     goalsScored: { type: Number, required: true, default: 0 },
     goalsReceived: { type: Number, required: true, default: 0 },
     rating: { type: Number, required: true, default: 0 },
-    level: { type: Number, required: true, default: 0 }
+    level: { type: Number, required: true, default: 0 },
+    members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 
 module.exports = mongoose.model('Team', teamSchema);

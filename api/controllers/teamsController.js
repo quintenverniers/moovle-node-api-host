@@ -8,6 +8,7 @@ const Team = require('../models/team');
 exports.get_all_teams = (req, res, next) => {
     Team.find()
     .populate('owner')
+    .populate('members', '_id firstname lastname email')
     .exec()
     .then((teams) => {
         res.status(200).json({

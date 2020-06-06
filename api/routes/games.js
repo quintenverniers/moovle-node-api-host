@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const checkAuth = require('../middleware/verifyAuthenticationToken.js');
-const GamesController = require('../controllers/games');
+const GamesController = require('../controllers/gamesController');
 
 /**
  * Get all games
