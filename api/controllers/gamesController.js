@@ -7,6 +7,7 @@ const Game = require('../models/game');
  */
 exports.get_all_games = (req, res, next) => {
     Game.find()
+    .populate('host','_id firstname lastname')
     .exec()
     .then((games) => {
         console.log(games);
@@ -27,6 +28,7 @@ exports.get_all_games = (req, res, next) => {
  * Create a game
  */
 exports.create_new_game = (req, res, next) => {
+    console.log(req.userData.userID);
     let createdDate = new Date().getTime();
     const game = new Game({
         _id: new mongoose.Types.ObjectId(),
@@ -41,7 +43,7 @@ exports.create_new_game = (req, res, next) => {
         venueType: req.body.venueType,
         payingGame: req.body.payingGame,
         entryPrice: req.body.entryPrice,
-        host: req.body.host,
+        host: req.userData.userID,
         createdAt: createdDate,
         updatedAt: createdDate
     });

@@ -13,7 +13,7 @@ const gameSchema = mongoose.Schema({
     venueType: { type: String, required: true },
     payingGame: { type: Boolean, required: true },
     entryPrice: { type: Number, required: true },
-    host: { type: String, required: true },
+    host: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
     updatedAt: { type: Date, required: true },
 });
