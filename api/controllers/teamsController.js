@@ -26,10 +26,11 @@ exports.get_all_teams = (req, res, next) => {
  */
 exports.create_new_team = (req, res, next) => {
         let file = (req.file) ? req.file.path : null;
+        let user = req.userData.userID;
         const team = new Team({
             _id: new mongoose.Types.ObjectId(),
             name: req.body.name,
-            owner: req.body.owner,
+            owner: user,
             teamImage: file
         });
 
