@@ -8,7 +8,7 @@ const TeamStats = require('../models/teamStats');
  */
 exports.get_all_teams = (req, res, next) => {
     Team.find()
-    .populate('teamstats')
+    .populate('owner')
     .exec()
     .then((teams) => {
         res.status(200).json({
@@ -25,30 +25,25 @@ exports.get_all_teams = (req, res, next) => {
  * Create a team
  */
 exports.create_new_team = (req, res, next) => {
-    const teamStats = new TeamStats({
-        _id: new mongoose.Types.ObjectId(),
-    });
-    teamStats.save()
-    .then(teamStats => {
+        let file = (req.file) ? req.file.path : null;
         const team = new Team({
             _id: new mongoose.Types.ObjectId(),
             name: req.body.name,
             owner: req.body.owner,
-            teamstats: teamStats._id,
-            teamImage: req.file.path
+            teamImage: file
         });
+
         team.save().then(result => {
             res.status(201).json({
                 message: 'Handling POST request to /teams',
                 createdTeam: result,
                 user: req.userData
             }); 
-        })
-    }).catch(err => {
+        }).catch(err => {
         res.status(500).json({
             error: err
-        });
-    })
+            });
+        })
 }
 
 /**
@@ -57,6 +52,7 @@ exports.create_new_team = (req, res, next) => {
 exports.get_team_by_id = (req, res, next) => {
     const id = req.params.teamID;
     Team.findById(id)
+    .populate('owner')
     .exec()
     .then((doc) => {
         console.log(doc);
@@ -108,11 +104,8 @@ exports.delete_team = (req, res, next) => {
     .exec()
     .then((doc) => {
         if(doc) {
-            return TeamStats.deleteOne({_id: doc.teamstats}).exec()
+            return Team.deleteOne({_id: id}).exec()
         }
-    })
-    .then(() => {
-        return Team.deleteOne({_id: id}).exec()
     })
     .then((teamresult => {
         res.status(200).json(teamresult);
