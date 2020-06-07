@@ -25,6 +25,30 @@ exports.get_all_games = (req, res, next) => {
 }
 
 /**
+ * search games
+ */
+exports.search_games = (req, res, next) => {
+    console.log(req.query.date);
+    console.log(req.query.date);
+    /*Game.find()
+    .populate('host','_id firstname lastname')
+    .exec()
+    .then((games) => {
+        console.log(games);
+        res.status(200).json({
+            count: games.length,
+            games: games
+        });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    })*/
+}
+
+/**
  * Create a game
  */
 exports.create_new_game = (req, res, next) => {
@@ -92,11 +116,17 @@ exports.get_game_by_id = (req, res, next) => {
  * Update a game
  */
 exports.update_game = (req, res, next) => {
-    let updateDate = new Date();
+    let date = new Date();
+    date.setUTCHours(0,0,0,0);
+    updateDate = Date.parse(date.toISOString());
+    console.log(date.toISOString());
+
     const id = req.params.gameID;
     const fieldsToUpdate = {};
-    for(const field of req.body) {
-        fieldsToUpdate[field.propName] = field.value
+    if(req.body.length > 0) {
+        for(const field of req.body) {
+            fieldsToUpdate[field.propName] = field.value
+        }
     }
     fieldsToUpdate['updatedAt'] = updateDate;
 

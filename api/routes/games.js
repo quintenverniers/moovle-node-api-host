@@ -10,6 +10,11 @@ const GamesController = require('../controllers/gamesController');
 router.get('/', GamesController.get_all_games);
 
 /**
+ * Search for games
+ */
+router.get('/search/', GamesController.search_games);
+
+/**
  * Create a game
  */
 router.post('/', checkAuth, GamesController.create_new_game);
