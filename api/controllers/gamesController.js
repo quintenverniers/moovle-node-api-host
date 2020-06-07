@@ -116,6 +116,90 @@ exports.update_game = (req, res, next) => {
 }
 
 /**
+ * Join a game
+ */
+exports.join_game = (req, res, next) => {
+    const id = req.params.gameID;
+    const userToJoinGame = req.userData.userID;
+    let currentParticipants = [];
+
+    Game.findById(id)
+    .exec()
+    .then((game) => {
+        
+        currentParticipants = game.participants;
+        spotsLeft = game.spotsLeft;
+
+        if(currentParticipants.indexOf(userToJoinGame) === -1 && currentParticipants.length < game.totalSpots) {
+            currentParticipants.push(userToJoinGame);
+            spotsLeft -= 1;
+        }
+        
+        return Game.updateOne(
+            { _id: id },
+            { $set: {
+                participants: currentParticipants,
+                spotsLeft: spotsLeft,
+            }
+        }).exec();
+    })
+    .then((gameResult) => {
+        res.status(200).json({
+            currentParticipants: currentParticipants,
+            newUser: userToJoinGame
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        })
+    });
+}
+
+/**
+ * Leave a game
+ */
+exports.leave_team = (req, res, next) => {
+    const id = req.params.teamID;
+    const userToLeaveTeam = req.body.user;
+    let currentMembers = [];
+    Team.findById(id)
+    .exec()
+    .then((team) => {
+        currentMembers = team.members;
+
+        console.log(currentMembers);
+        
+        let index = currentMembers.indexOf(userToLeaveTeam);
+        if(index > -1) {
+            currentMembers.splice(index,1);
+        }
+
+        console.log(currentMembers);
+        
+
+        return Team.updateOne(
+            { _id: id },
+            { $set: {
+                members: currentMembers
+            }
+        }).exec();
+    })
+    .then((teamResult) => {
+        res.status(200).json({
+            members: currentMembers,
+            newUser: userToLeaveTeam
+        });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    });
+}
+
+/**
  * Delete a game
  */
 exports.delete_game = (req, res, next) => {

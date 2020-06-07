@@ -16,6 +16,7 @@ const gameSchema = mongoose.Schema({
     host: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
     updatedAt: { type: Date, required: true },
+    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 
 module.exports = mongoose.model('Game', gameSchema);
