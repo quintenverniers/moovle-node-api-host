@@ -28,10 +28,12 @@ exports.get_all_games = (req, res, next) => {
  * search games
  */
 exports.search_games = (req, res, next) => {
-    console.log(req.query.date);
-    console.log(req.query.date);
-    /*Game.find()
-    .populate('host','_id firstname lastname')
+    filterParams = req.query;
+    for(let queryProp in filterParams) {
+        console.log(queryProp+": "+filterParams[queryProp]);
+    }
+    
+    Game.find(filterParams)
     .exec()
     .then((games) => {
         console.log(games);
@@ -45,7 +47,7 @@ exports.search_games = (req, res, next) => {
         res.status(500).json({
             error: err
         });
-    })*/
+    })
 }
 
 /**
