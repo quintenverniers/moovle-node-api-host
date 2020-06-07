@@ -14,6 +14,7 @@ const userSchema = mongoose.Schema({
     gamesDraw: { type: Number, required: true, default: 0 },
     rating: { type: Number, required: true, default: 0 },
     experience: { type: Number, required: true, default: 0 },
+    createdAt: { type: String, required: true, default: 0 }
 });
 
 module.exports = mongoose.model('User', userSchema);

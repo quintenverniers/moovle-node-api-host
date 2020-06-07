@@ -50,6 +50,9 @@ exports.get_user_by_id = (req, res, next) => {
  * Create a user
  */
 exports.register_user = (req, res, next) => {
+    let date = new Date();
+    date.setUTCHours(0,0,0,0);
+    createdDate = Date.parse(date.toISOString());
     User.find({email: req.body.email})
     .exec()
     .then(user => {
@@ -73,6 +76,7 @@ exports.register_user = (req, res, next) => {
                         lastname: req.body.lastname,
                         country: req.body.country,
                         dateOfBirth: req.body.birthday,
+                        createdAt: createdDate
                     });
                     user.save()
                     .then(createdUser => {
