@@ -25,9 +25,14 @@ router.get('/:gameID', GamesController.get_game_by_id);
 router.patch('/:gameID', checkAuth, GamesController.update_game);
 
 /**
- * Update a game
+ * Join a game
  */
 router.patch('/join-game/:gameID', checkAuth, GamesController.join_game);
+
+/**
+ * Leave a game
+ */
+router.patch('/leave-game/:gameID', checkAuth, GamesController.leave_game);
 
 /**
  * Delete a game

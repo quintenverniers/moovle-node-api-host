@@ -159,36 +159,43 @@ exports.join_game = (req, res, next) => {
 /**
  * Leave a game
  */
-exports.leave_team = (req, res, next) => {
-    const id = req.params.teamID;
-    const userToLeaveTeam = req.body.user;
-    let currentMembers = [];
-    Team.findById(id)
+exports.leave_game = (req, res, next) => {
+    const id = req.params.gameID;
+    const userToLeaveGame = req.userData.userID;
+    let currentParticipants = [];
+    Game.findById(id)
     .exec()
-    .then((team) => {
-        currentMembers = team.members;
+    .then((game) => {
+        currentParticipants = game.participants;
+        spotsLeft = game.spotsLeft;
 
-        console.log(currentMembers);
+        console.log(currentParticipants);
+        console.log({userToLeaveGame});
         
-        let index = currentMembers.indexOf(userToLeaveTeam);
+        let index = currentParticipants.indexOf(userToLeaveGame);
         if(index > -1) {
-            currentMembers.splice(index,1);
+            currentParticipants.splice(index,1);
+            spotsLeft += 1;
         }
 
-        console.log(currentMembers);
+        console.log(currentParticipants);
         
 
-        return Team.updateOne(
+        return Game.updateOne(
             { _id: id },
             { $set: {
-                members: currentMembers
+                participants: currentParticipants,
+                spotsLeft: spotsLeft
             }
         }).exec();
+        
     })
-    .then((teamResult) => {
+    .then((gameResult) => {
         res.status(200).json({
-            members: currentMembers,
-            newUser: userToLeaveTeam
+            game: gameResult,
+            participants: currentParticipants,
+            oldUser: userToLeaveGame,
+            spotsLeft: spotsLeft
         });
     })
     .catch(err => {
