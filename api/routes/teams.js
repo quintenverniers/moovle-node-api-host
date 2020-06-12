@@ -36,6 +36,11 @@ const TeamsController = require('../controllers/teamsController');
 router.get('/', TeamsController.get_all_teams);
 
 /**
+ * Get all teams
+ */
+router.get('/teams_by_owner', checkAuth, TeamsController.get_teams_from_owner);
+
+/**
  * Create a team
  */
 router.post('/', checkAuth, upload.single('teamImage'), TeamsController.create_new_team);

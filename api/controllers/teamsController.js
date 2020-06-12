@@ -22,6 +22,26 @@ exports.get_all_teams = (req, res, next) => {
 };
 
 /**
+ * Get all teams
+ */
+exports.get_teams_from_owner = (req, res, next) => {
+    let user = req.userData.userID;
+    Team.find({owner: user })
+    .populate('owner')
+    .populate('members', '_id firstname lastname email')
+    .exec()
+    .then((teams) => {
+        res.status(200).json({
+            count: teams.length,
+            teams: teams
+        });
+    })
+    .catch(err => {
+        res.status(500).json({error: err});
+    });
+};
+
+/**
  * Create a team
  */
 exports.create_new_team = (req, res, next) => {
