@@ -5,7 +5,7 @@ const gameSchema = mongoose.Schema({
     teamSize: { type: Number, required: true },
     totalSpots: { type: Number, required: true },
     spotsLeft: { type: Number, required: true },
-    date: { type: String, required: true },
+    date: { type: Number, required: true },
     startTime: { type: String, required: true },
     duration: { type: String, required: true },
     location: { type: String, required: true },
@@ -14,8 +14,8 @@ const gameSchema = mongoose.Schema({
     payingGame: { type: Boolean, required: true },
     entryPrice: { type: Number, required: true },
     host: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    createdAt: { type: String, required: true },
-    updatedAt: { type: String, required: true },
+    createdAt: { type: Number, required: true },
+    updatedAt: { type: Number, required: true },
     participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 

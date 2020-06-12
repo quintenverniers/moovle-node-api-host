@@ -118,10 +118,7 @@ exports.get_game_by_id = (req, res, next) => {
  * Update a game
  */
 exports.update_game = (req, res, next) => {
-    let date = new Date();
-    date.setUTCHours(0,0,0,0);
-    updateDate = Date.parse(date.toISOString());
-    console.log(date.toISOString());
+    let updateDate = new Date().getTime();
 
     const id = req.params.gameID;
     const fieldsToUpdate = {};
