@@ -28,15 +28,18 @@ exports.get_all_games = (req, res, next) => {
  * Get all games which were hosted by the loggedIn user
  */
 exports.get_games_by_host = (req, res, next) => {
+    let userData = req.userData;
+    console.log({userData});
     let user = req.userData.userID;
     Game.find({host: user})
     .populate('host','_id firstname lastname')
     .exec()
     .then((games) => {
-        console.log(games);
+        //console.log(games);
         res.status(200).json({
             count: games.length,
-            games: games
+            games: games,
+            newAuthToken: req.userData.newToken
         });
     })
     .catch(err => {
