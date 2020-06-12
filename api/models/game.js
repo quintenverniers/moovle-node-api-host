@@ -16,6 +16,7 @@ const gameSchema = mongoose.Schema({
     host: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Number, required: true },
     updatedAt: { type: Number, required: true },
+    xpClaimed: { type: Boolean, required: true, default: false },
     participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 
