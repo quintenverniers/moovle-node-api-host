@@ -53,10 +53,38 @@ exports.get_all_upcoming_games = (req, res, next) => {
  * Get all games which were hosted by the loggedIn user
  */
 exports.get_games_by_host = (req, res, next) => {
-    let userData = req.userData;
-    console.log({userData});
+    //logged In user
     let user = req.userData.userID;
     Game.find({host: user})
+    .populate('host','_id firstname lastname')
+    .exec()
+    .then((games) => {
+        //console.log(games);
+        res.status(200).json({
+            count: games.length,
+            games: games,
+            newAuthToken: req.userData.newToken
+        });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    })
+}
+
+/**
+ * Get all games which the loggedIn user has joined
+ */
+exports.get_games_participating = (req, res, next) => {
+    //today's Date
+    let gameDate = new Date();
+    gameDate.setHours(0,0,0);
+    searchDate=gameDate.getTime(); //timestamp
+    //loggedIn user
+    let user = req.userData.userID;
+    Game.find({participants: user, date: {$gt: searchDate}})
     .populate('host','_id firstname lastname')
     .exec()
     .then((games) => {

@@ -20,6 +20,11 @@ router.get('/upcoming', GamesController.get_all_upcoming_games);
 router.get('/userhosted_games', checkAuth, GamesController.get_games_by_host);
 
 /**
+ * Get games that user has joined
+ */
+router.get('/participating', checkAuth, GamesController.get_games_participating);
+
+/**
  * Search for games
  */
 router.get('/search/', GamesController.search_games);
