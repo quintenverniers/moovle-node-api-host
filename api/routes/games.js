@@ -10,6 +10,11 @@ const GamesController = require('../controllers/gamesController');
 router.get('/', GamesController.get_all_games);
 
 /**
+ * Get all upcoming games
+ */
+router.get('/upcoming', GamesController.get_all_upcoming_games);
+
+/**
  * Get games hosted by loggedIn user
  */
 router.get('/userhosted_games', checkAuth, GamesController.get_games_by_host);
