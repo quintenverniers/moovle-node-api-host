@@ -156,7 +156,8 @@ exports.create_new_game = (req, res, next) => {
         console.log(result);
         res.status(201).json({
             message: 'Handling POST request to /games',
-            createdGame: result
+            createdGame: result,
+            newAuthToken: req.userData.newToken
         });
     })
     .catch(err => {
@@ -213,7 +214,8 @@ exports.update_game = (req, res, next) => {
     .then((updatedGame) => {
         console.log(updatedGame);
         res.status(200).json({
-            updatedGame
+            updatedGame,
+            newAuthToken: req.userData.newToken
         });
     })
     .catch(err => {
@@ -254,7 +256,8 @@ exports.join_game = (req, res, next) => {
     .then((gameResult) => {
         res.status(200).json({
             currentParticipants: currentParticipants,
-            newUser: userToJoinGame
+            newUser: userToJoinGame,
+            newAuthToken: req.userData.newToken
         });
     })
     .catch(err => {
@@ -303,7 +306,8 @@ exports.leave_game = (req, res, next) => {
             game: gameResult,
             participants: currentParticipants,
             oldUser: userToLeaveGame,
-            spotsLeft: spotsLeft
+            spotsLeft: spotsLeft,
+            newAuthToken: req.userData.newToken
         });
     })
     .catch(err => {
@@ -322,7 +326,12 @@ exports.delete_game = (req, res, next) => {
     Game.deleteOne({ _id: id })
     .exec()
     .then((result) => {
-        res.status(200).json(result);
+        res.status(200).json({
+                status: 'deletion done',
+                result,
+                newAuthToken: req.userData.newToken
+            }
+        );
     })
     .catch(err => {
         res.status(500).json({
