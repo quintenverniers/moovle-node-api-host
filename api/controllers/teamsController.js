@@ -33,7 +33,8 @@ exports.get_teams_from_owner = (req, res, next) => {
     .then((teams) => {
         res.status(200).json({
             count: teams.length,
-            teams: teams
+            teams: teams,
+            newAuthToken: req.userData.newToken
         });
     })
     .catch(err => {
@@ -53,7 +54,8 @@ exports.get_teams_user_is_in = (req, res, next) => {
     .then((teams) => {
         res.status(200).json({
             count: teams.length,
-            teams: teams
+            teams: teams,
+            newAuthToken: req.userData.newToken
         });
     })
     .catch(err => {
@@ -67,18 +69,22 @@ exports.get_teams_user_is_in = (req, res, next) => {
 exports.create_new_team = (req, res, next) => {
         let file = (req.file) ? req.file.path : null;
         let user = req.userData.userID;
+        let members = [];
+        members.push(user);
         const team = new Team({
             _id: new mongoose.Types.ObjectId(),
             name: req.body.name,
             owner: user,
-            teamImage: file
+            teamImage: file,
+            members: members
         });
 
         team.save().then(result => {
             res.status(201).json({
                 message: 'Handling POST request to /teams',
                 createdTeam: result,
-                user: req.userData
+                user: req.userData,
+                newAuthToken: req.userData.newToken
             }); 
         }).catch(err => {
         res.status(500).json({
@@ -127,7 +133,10 @@ exports.update_team = (req, res, next) => {
     Team.update({ _id: id },{ $set: fieldsToUpdate })
     .exec()
     .then((result) => {
-        res.status(200).json({ result });
+        res.status(200).json({ 
+            result,
+            newAuthToken: req.userData.newToken
+         });
     })
     .catch(err => {
         res.status(500).json({
@@ -159,7 +168,8 @@ exports.join_team = (req, res, next) => {
         res.status(200).json({
             teamResult,
             currentMembers: currentMembers,
-            newUser: userToJoinTeam
+            newUser: userToJoinTeam,
+            newAuthToken: req.userData.newToken
         });
     })
     .catch(err => {
@@ -201,7 +211,8 @@ exports.leave_team = (req, res, next) => {
     .then((teamResult) => {
         res.status(200).json({
             members: currentMembers,
-            newUser: userToLeaveTeam
+            newUser: userToLeaveTeam,
+            newAuthToken: req.userData.newToken
         });
     })
     .catch(err => {
@@ -225,7 +236,10 @@ exports.delete_team = (req, res, next) => {
         }
     })
     .then((teamresult => {
-        res.status(200).json(teamresult);
+        res.status(200).json({
+            teamresult,
+            newAuthToken: req.userData.newToken
+        });
     }))
     .catch(err => {
         console.log(err);
