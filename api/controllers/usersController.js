@@ -102,7 +102,7 @@ exports.register_user = (req, res, next) => {
 };
 
 /**
- * Logina user
+ * Login a user
  */
 exports.user_login = (req, res, next) => {
     User.find({ email: req.body.email }).exec()
@@ -161,7 +161,8 @@ exports.delete_user = (req, res, next) => {
     User.deleteOne({_id: req.params.userID}).exec()
     .then(result => {
         res.status(200).json({
-            message: 'user deleted'
+            message: 'user deleted',
+            newAuthToken: req.userData.newToken
         })
     })
     .catch(err => {
@@ -175,7 +176,7 @@ exports.delete_user = (req, res, next) => {
  * Update a user
  */
 exports.update_user = (req, res, next) => {
-    const id = req.params.userID;
+    const id = req.userData.userID;
     const fieldsToUpdate = {};
     for(const field of req.body) {
         fieldsToUpdate[field.propName] = field.value
@@ -184,7 +185,10 @@ exports.update_user = (req, res, next) => {
     User.update({ _id: id },{ $set: fieldsToUpdate })
     .exec()
     .then((result) => {
-        res.status(200).json({ result });
+        res.status(200).json({ 
+            result,
+            newAuthToken: req.userData.newToken
+        });
     })
     .catch(err => {
         res.status(500).json({

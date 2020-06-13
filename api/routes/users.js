@@ -33,6 +33,6 @@ router.delete('/:userID', checkAuth, UsersController.delete_user);
 /**
  * Update a user
  */
-router.patch('/:userID', checkAuth, UsersController.update_user);
+router.patch('/', checkAuth, UsersController.update_user);
 
 module.exports = router;
