@@ -42,6 +42,26 @@ exports.get_teams_from_owner = (req, res, next) => {
 };
 
 /**
+ * Get all teams the loggedIn user is in
+ */
+exports.get_teams_user_is_in = (req, res, next) => {
+    let user = req.userData.userID;
+    Team.find({members: user })
+    .populate('owner')
+    .populate('members', '_id firstname lastname email')
+    .exec()
+    .then((teams) => {
+        res.status(200).json({
+            count: teams.length,
+            teams: teams
+        });
+    })
+    .catch(err => {
+        res.status(500).json({error: err});
+    });
+};
+
+/**
  * Create a team
  */
 exports.create_new_team = (req, res, next) => {

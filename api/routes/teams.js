@@ -36,9 +36,14 @@ const TeamsController = require('../controllers/teamsController');
 router.get('/', TeamsController.get_all_teams);
 
 /**
- * Get all teams
+ * Get teams owned by current user
  */
 router.get('/teams_by_owner', checkAuth, TeamsController.get_teams_from_owner);
+
+/**
+ * Get teams where current user is a member of
+ */
+router.get('/teams_user_is_in', checkAuth, TeamsController.get_teams_user_is_in);
 
 /**
  * Create a team
