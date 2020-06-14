@@ -247,6 +247,24 @@ exports.update_game = (req, res, next) => {
  * Join a game
  */
 exports.join_game = (req, res, next) => {
+    //updating user
+	const joinGameXP = 100;
+	let userID = req.userData.userID;
+	User.find({ _id: req.userData.userID })
+	.exec()
+	.then((user) => {
+		let currentXP = user[0].experience;
+		let newUserXP = currentXP + joinGameXP;
+		return User.updateOne({ _id: userID }, { $set: { experience: newUserXP } }).exec();
+	})
+	.then(updatedUser => {
+		//console.log(updatedUser);
+	})
+	.catch(error => {
+		console.log(error);
+    });
+    
+    //updating game
     const id = req.params.gameID;
     const userToJoinGame = req.userData.userID;
     let currentParticipants = [];
