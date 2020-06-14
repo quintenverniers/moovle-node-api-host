@@ -195,6 +195,23 @@ exports.update_team = (req, res, next) => {
  * Join a team
  */
 exports.join_team = (req, res, next) => {
+	//updating user
+	const joinTeamXP = 100;
+	let userID = req.userData.userID;
+	User.find({ _id: req.userData.userID })
+	.exec()
+	.then((user) => {
+		let currentXP = user[0].experience;
+		let newUserXP = currentXP + joinTeamXP;
+		return User.updateOne({ _id: userID }, { $set: { experience: newUserXP } }).exec();
+	})
+	.then(updatedUser => {
+		//console.log(updatedUser);
+	})
+	.catch(error => {
+		console.log(error);
+	});
+
 	const id = req.params.teamID;
 	const userToJoinTeam = req.body.user;
 	let currentMembers = [];
