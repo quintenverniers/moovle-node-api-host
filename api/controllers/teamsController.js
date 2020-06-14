@@ -23,7 +23,34 @@ exports.get_all_teams = (req, res, next) => {
 };
 
 /**
- * Get all teams
+ * Get all playerstats of a team (rankings)
+ */
+exports.get_all_team_playerstats = (req, res, next) => {
+	const id = req.params.teamID;
+	Team.findById(id, {_id: 1, name: 1, members: 1})
+		.populate('members', '_id firstname lastname experience')
+		.exec()
+		.then((doc) => {
+			console.log(doc);
+			if (doc) {
+				res.status(200).json(doc);
+			} else {
+				res.status(404).json({
+					message: 'no team found with the provided ID'
+				})
+			}
+
+		})
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({
+				error: err
+			});
+		});
+}
+
+/**
+ * Get all teams by owner 
  */
 exports.get_teams_from_owner = (req, res, next) => {
 	let user = req.userData.userID;

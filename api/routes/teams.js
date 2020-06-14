@@ -36,6 +36,11 @@ const TeamsController = require('../controllers/teamsController');
 router.get('/', TeamsController.get_all_teams);
 
 /**
+ * Get playerstats from specific team
+ */
+router.get('/stats/:teamID', TeamsController.get_all_team_playerstats);
+
+/**
  * Get teams owned by current user
  */
 router.get('/teams_by_owner', checkAuth, TeamsController.get_teams_from_owner);
