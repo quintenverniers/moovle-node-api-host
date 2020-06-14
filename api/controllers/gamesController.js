@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Game = require('../models/game');
+const User = require('../models/user');
 
 
 /**
@@ -33,6 +34,7 @@ exports.get_all_upcoming_games = (req, res, next) => {
     searchDate=gameDate.getTime();
     Game.find({date: {$gt: searchDate}})
     .populate('host','_id firstname lastname')
+    .populate('participants','_id firstname lastname')
     .exec()
     .then((games) => {
         //console.log(games);
@@ -133,8 +135,24 @@ exports.search_games = (req, res, next) => {
  * Create a game
  */
 exports.create_new_game = (req, res, next) => {
-    console.log(req.userData.userID);
+    const createGameXP = 500;
+    //console.log(req.userData.userID);
     let createdDate = new Date().getTime();
+    let userID = req.userData.userID;
+    User.find({_id: req.userData.userID})
+    .exec()
+    .then((user) => {
+        let currentXP = user[0].experience;
+        let newUserXP = currentXP + createGameXP;
+        return User.updateOne({_id: userID},{$set: {experience: newUserXP}}).exec();
+    })
+    .then(updatedUser => {
+        //console.log(updatedUser);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
     const game = new Game({
         _id: new mongoose.Types.ObjectId(),
         teamSize: req.body.teamSize,
@@ -153,7 +171,7 @@ exports.create_new_game = (req, res, next) => {
         updatedAt: createdDate
     });
     game.save().then(result => {
-        console.log(result);
+        //console.log(result);
         res.status(201).json({
             message: 'Handling POST request to /games',
             createdGame: result,
@@ -176,7 +194,7 @@ exports.get_game_by_id = (req, res, next) => {
     Game.findById(id)
     .exec()
     .then((doc) => {
-        console.log(doc);
+        //console.log(doc);
         if(doc) {
             res.status(200).json(doc);
         } else {
