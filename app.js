@@ -3,18 +3,23 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const compression = require('compression');
+const helmet = require('helmet');
 
 const gamesRoutes = require('./api/routes/games');
 const teamRoutes = require('./api/routes/teams');
 const userRoutes = require('./api/routes/users');
 
 mongoose.set('useCreateIndex', true);
+let mongoDBPassword = process.env.PASSWORD || "7W8TyLizzcPHQdi";
 mongoose.connect('mongodb+srv://root:'+process.env.PASSWORD+'@moovle-mongodb-uzpam.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.use(morgan('dev'));
 app.use('/uploads',express.static('uploads'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(compression());
+app.use(helmet());
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
