@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
                 email: decodedToken.email,
                 userID: decodedToken.userID
             }, 
-            process.env.JWT_KEY, 
+            authKey, 
             {
                 expiresIn: "7d"
             }
