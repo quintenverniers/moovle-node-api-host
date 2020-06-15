@@ -3,9 +3,9 @@ const app = require('./app');
 
 const port = process.env.PORT || 5000;
 
-const server = https.createServer(app);
+//const server = https.createServer(app);
 
-server.listen(port, () => {
+/*server.listen(port, () => {
     console.log("listening on"+`${port}`);
-});
-//app.listen(port);
+});*/
+app.listen(port);
