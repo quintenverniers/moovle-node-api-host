@@ -105,6 +105,7 @@ exports.register_user = (req, res, next) => {
  * Login a user
  */
 exports.user_login = (req, res, next) => {
+    let JWT_KEY = "icSSmYBncvosHIeqsbnObyl2Y5SCfveupdcA4Oz2xAMIYT8cjHesNqNXkwqDkDB"
     User.find({ email: req.body.email }).exec()
     .then(users => {
         if(users.length < 1) {
@@ -124,7 +125,7 @@ exports.user_login = (req, res, next) => {
                         email: users[0].email,
                         userID: users[0]._id
                     }, 
-                    process.env.JWT_KEY, 
+                    JWT_KEY, 
                     {
                         expiresIn: "7d"
                     }
