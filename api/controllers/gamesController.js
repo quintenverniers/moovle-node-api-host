@@ -192,6 +192,7 @@ exports.create_new_game = (req, res, next) => {
 exports.get_game_by_id = (req, res, next) => {
     const id = req.params.gameID;
     Game.findById(id)
+    .populate('participants','_id firstname lastname')
     .exec()
     .then((doc) => {
         //console.log(doc);
