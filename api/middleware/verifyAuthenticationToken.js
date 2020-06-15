@@ -4,6 +4,7 @@ module.exports = (req, res, next) => {
     let authKey = "icSSmYBncvosHIeqsbnObyl2Y5SCfveupdcA4Oz2xAMIYT8cjHesNqNXkwqDkDB";
     try {
         const token = req.headers.authorization.split(" ")[1];
+        console.log(token);
         const decodedToken = JWT.verify(token, authKey);
         const newAuthToken = JWT.sign(
             {
