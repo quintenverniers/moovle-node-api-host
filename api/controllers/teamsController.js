@@ -146,6 +146,7 @@ exports.get_team_by_id = (req, res, next) => {
 	const id = req.params.teamID;
 	Team.findById(id)
 		.populate('owner')
+		.populate('members','_id firstname lastname')
 		.exec()
 		.then((doc) => {
 			console.log(doc);
