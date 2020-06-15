@@ -214,7 +214,7 @@ exports.join_team = (req, res, next) => {
 	});
 
 	const id = req.params.teamID;
-	const userToJoinTeam = req.body.user;
+	const userToJoinTeam = req.userData.userID;
 	let currentMembers = [];
 	Team.findById(id)
 		.exec()
