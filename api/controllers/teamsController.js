@@ -250,6 +250,7 @@ exports.join_team = (req, res, next) => {
 exports.leave_team = (req, res, next) => {
 	const id = req.params.teamID;
 	const userToLeaveTeam = req.userData.userID;
+	
 	let currentMembers = [];
 	Team.findById(id)
 		.exec()
